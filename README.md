@@ -1,6 +1,6 @@
 # Capistrano::Lemur
 
-TODO: Write a gem description
+A collection or Capistrano recipes for a LEMUR (Linux/Nginx/Mysql/Ubuntu/Rails) stack
 
 ## Installation
 
@@ -18,7 +18,9 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Add this line to your application's Capfile:
+
+    require 'capistrano/lemur/mysql'
 
 ## Contributing
 
