@@ -1,6 +1,6 @@
 # Capistrano::Lemur
 
-A collection or Capistrano recipes for a LEMUR (Linux/Nginx/Mysql/Ubuntu/Rails) stack
+A collection or Capistrano recipes for a LEMUR (Linux/Nginx/Mysql/Unicorn/Rails) stack
 
 ## Installation
 
