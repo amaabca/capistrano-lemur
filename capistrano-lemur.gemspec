@@ -4,8 +4,8 @@ require File.expand_path('../lib/capistrano-lemur/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Jordan Babe"]
   gem.email         = ["jorbabe@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{Collection of recipes for deploying LEMUR (Linux/Nginx/Mysql/Ubuntu/Rails) apps}
+  gem.summary       = %q{Collection of recipes for deploying LEMUR (Linux/Nginx/Mysql/Ubuntu/Rails) apps}
   gem.homepage      = ""
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
