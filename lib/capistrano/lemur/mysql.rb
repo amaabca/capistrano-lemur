@@ -2,7 +2,7 @@ Capistrano::Configuration.instance.load do
 
   namespace :mysql do
   
-    desc "Create default db and user. TODO: Make this idempotent"
+    desc "LMR Create default db and user. TODO: Make this idempotent"
     task :create_users, :roles => :db, :except => { :no_release => true } do
   
      db_config = YAML::load_file("config/database.yml")
@@ -29,17 +29,17 @@ Capistrano::Configuration.instance.load do
    
     end
 
-    desc "Capistrano override: Setup application schema"
+    desc "LMR Setup application schema"
     task :setup, :only => {:primary => true}, :except => { :no_release => true } do  
       run "cd #{current_path}; bundle exec rake RAILS_ENV=#{rails_env} db:create"
     end
   
-    desc "Capistrano override: db:migration"
+    desc "LMR db:migration"
     task :migrate, :only => {:primary => true}, :except => { :no_release => true } do
       run "cd #{current_path}; bundle exec rake RAILS_ENV=#{rails_env} db:migrate"
     end
   
-    desc "Capistrano override: seed the database on already deployed code"
+    desc "LMR seed the database on already deployed code"
     task :seed, :only => {:primary => true}, :except => { :no_release => true } do
       confirm = Capistrano::CLI.ui.ask "This is a dangerous task. Type Y to continue."
       exit unless confirm.downcase == 'y'
