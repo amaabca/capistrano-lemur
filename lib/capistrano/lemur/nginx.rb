@@ -11,7 +11,7 @@ Capistrano::Configuration.instance.load do
         location = Capistrano::CLI.ui.ask "Filename of nginx config file (blank for default of config/nginx.#{stage})?"
         location = "nginx.#{stage}" if location.nil? or location.length < 1
         # Backup the old config and copy app config
-        run "cp #{nginx_path}/sites-available/#{application} #{nginx_path}/sites-available/#{application}.#{Time.now.strftime("%Y%m%d_%I%M")} && cp #{current_path}/config/#{location} #{nginx_path}/sites-available/#{application}"
+        run "cp #{nginx_path}/sites-available/#{application} #{nginx_path}/sites-available/#{application}.#{Time.now.strftime("%Y%m%dT%H%M%S")} && cp #{current_path}/config/#{location} #{nginx_path}/sites-available/#{application}"
         run "if [ ! -L #{nginx_path}/sites-enabled/#{application} ]; then ln -s #{nginx_path}/sites-available/#{application} #{nginx_path}/sites-enabled/#{application}; fi"
       else
         puts "Nginx configuration change aborted"
