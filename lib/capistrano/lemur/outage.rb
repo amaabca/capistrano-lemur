@@ -1,5 +1,9 @@
 require 'capistrano'
 
+# TODO: use the built in Capistrano web:disable by setting: 
+# maintenance_basename (path to html)
+# maintenance_template_path (path to erb)
+
 module Capistrano::Lemur::Outage
   def self.load_into(configuration)
     configuration.load do
