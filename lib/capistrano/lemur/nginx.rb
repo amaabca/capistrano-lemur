@@ -2,20 +2,25 @@ Capistrano::Configuration.instance.load do
   namespace :nginx do
     
     set(:nginx_path) { "/etc/nginx" }
-    set(:nginx_restart_cmd) {"/etc/init.d/nginx restart"}
+    set(:nginx_cmd) {"/etc/init.d/nginx"}
 
-    desc "LMR Install nginx"
+    desc "LMR Copy application nginx config into sites-available and symlink into sites-enabled"
     task :setup, :roles => :web do
       confirm = Capistrano::CLI.ui.ask "This is a dangerous task. Type 'yes sir' to continue."
       if confirm.downcase == 'yes sir'
-        location = Capistrano::CLI.ui.ask "Filename of nginx config file (blank for default of config/templates/appname.stage)?"
-        location = "#{application}.#{stage}" if location.nil? or location.length < 1
-        run "cp #{current_path}/config/templates/#{location} #{nginx_path}/sites-available/#{application}"
+        location = Capistrano::CLI.ui.ask "Filename of nginx config file (blank for default of config/nginx.#{stage})?"
+        location = "nginx.#{stage}" if location.nil? or location.length < 1
+        # Backup the old config and copy app config
+        run "cp #{nginx_path}/sites-available/#{application} #{nginx_path}/sites-available/#{application}.#{Time.now.strftime("%Y%m%d_%I%M")} && cp #{current_path}/config/#{location} #{nginx_path}/sites-available/#{application}"
         run "if [ ! -L #{nginx_path}/sites-enabled/#{application} ]; then ln -s #{nginx_path}/sites-available/#{application} #{nginx_path}/sites-enabled/#{application}; fi"
       else
         puts "Nginx configuration change aborted"
         exit
       end
+    end
+    
+    task :test_config, :roles => :web do
+      sudo "#{nginx_cmd} configtest"
     end
 
     desc "LMR Restart only primary node"
@@ -37,7 +42,7 @@ Capistrano::Configuration.instance.load do
     def restart
       confirm = Capistrano::CLI.ui.ask "This is a dangerous task. Type 'yes sir' to continue."
       if confirm.downcase == "yes sir"
-        sudo "#{nginx_restart_cmd}"
+        sudo "#{nginx_cmd} restart"
       else
         puts "Restart aborted"
         exit      
