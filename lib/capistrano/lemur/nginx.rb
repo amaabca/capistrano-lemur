@@ -43,27 +43,24 @@ Capistrano::Configuration.instance.load do
 
     desc "LMR Restart only primary node"
     task :restart_primary, :roles => :web, :only => {:primary => true} do
-      restart
+      restart_nginx
     end
 
     desc "LMR Restart only secondary node"
     task :restart_secondary, :roles => :web, :except => {:primary => true} do
-      restart
+      restart_nginx
     end
     
     desc "LMR Restart all Nginx nodes"
-    task :restart_all, :roles => :web do
-      restart
+    task :restart, :roles => :web do
+      restart_nginx
     end
 
-  
-    def restart
-      confirm = Capistrano::CLI.ui.ask "This is a dangerous task. Type 'yes sir' to continue."
-      if confirm.downcase == "yes sir"
+    def restart_nginx
+      if Capistrano::CLI.ui.ask("This is a dangerous task. Type 'yes sir' to continue.") == "yes sir"
         sudo "#{nginx_cmd} restart"
       else
         puts "Restart aborted"
-        exit      
       end
     end
 
