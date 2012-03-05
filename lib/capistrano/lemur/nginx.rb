@@ -69,7 +69,7 @@ Capistrano::Configuration.instance.load do
   set(:nginx_erb_template) do
     <<-NGINX  
   upstream <%= application.to_s %> {
-    server unix:<%= shared_path.to_s %>/tmp/sockets/unicorn.sock fail_timeout=0;
+    server unix:<%= unicorn_target.to_s %>/tmp/sockets/unicorn.sock fail_timeout=0;
   } 
 
   server {
