@@ -3,7 +3,7 @@ Capistrano::Configuration.instance.load do
       set(:unicorn_target) { current_path }
 
       # TODO: make this more generic once we start using in multiple apps
-      namespace :deploy do
+      namespace :unicorn do
 
         # override default tasks to make capistrano happy
         desc "LMR Start unicorn"
@@ -24,5 +24,9 @@ Capistrano::Configuration.instance.load do
         end
         
       end
+
+      after "deploy:start",   "unicorn:start"
+      after "deploy:restart", "unicorn:restart"
+      after "deploy:stop",    "unicorn:stop"
     
 end
