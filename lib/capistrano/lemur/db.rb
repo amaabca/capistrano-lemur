@@ -42,13 +42,6 @@ Capistrano::Configuration.instance.load do
       run "cd #{current_path}; bundle exec rake RAILS_ENV=#{rails_env} db:remigrate"
     end
     
-    desc "Seed the database on already deployed code"
-    task :seed, :roles => :db, :only => {:primary => true}, :except => { :no_release => true } do
-      confirm = Capistrano::CLI.ui.ask "This is a dangerous task. Type 'yes sir' to continue."
-      exit unless confirm.downcase == 'yes sir'
-      run "cd #{current_path}; bundle exec rake RAILS_ENV=#{rails_env} db:seed"
-    end
-    
     after "mysql:create_users", "db:setup"
     
   end
