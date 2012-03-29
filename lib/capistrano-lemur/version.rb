@@ -1,5 +1,5 @@
 module Capistrano
   module Lemur
-    VERSION = "0.0.4"
+    VERSION = "0.0.5.dev"
   end
 end
