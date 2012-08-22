@@ -37,11 +37,16 @@ Capistrano::Configuration.instance.load do
 
 
     desc "Just creates a mysql user"
-    task :create_user, :roles => :db_server, :except => { :no_release => true } do
+    task :create_user, :roles => :mysql, :except => { :no_release => true } do
 
-      db_server = Capistrano::CLI.ui.ask("Mysql server: ")
+      if defined?(mysql_server) && !mysql_server.nil?
+        db_server = mysql_server
+      else
+        db_server =  Capistrano::CLI.ui.ask("Mysql server (Blank for first server with :mysql role): ")
+        db_server = roles[:mysql].servers.first if db_server.nil?
+      end
       db_user  = Capistrano::CLI.ui.ask("Database user: ")
-      db_host = Capistrano::CLI.ui.ask("Database user: ") || "%"
+      db_host = Capistrano::CLI.ui.ask("Database host (blank for '%'): ") || "%"
       db_password = Capistrano::CLI.password_prompt("Database user password: ")
       db_name = Capistrano::CLI.ui.ask("Database name: ")
 
@@ -61,17 +66,14 @@ Capistrano::Configuration.instance.load do
     end
 
     desc "Runs rake db:create"
-    task :create_db, :roles => :db_server, :except => { :no_release => true } do
-      foreman = Capistrano::CLI.ui.ask("Run task using foreman (Yn)?: ")
-      if !foreman.nil? && response.downcase == 'y'
+    task :create_db, :roles => :db, :only => {:primary => true}, :except => { :no_release => true } do
+      response = Capistrano::CLI.ui.ask("Run task using foreman (Yn)?: ")
+      if !response.nil? && response.downcase == 'y'
         run "cd #{current_path} && bin/foreman run bin/rake db:create"
       else
         run "cd #{current_path} && bin/rake db:create"
       end
     end
-
-
-    before "deploy:cold", "mysql:create_users"
 
   end
 
