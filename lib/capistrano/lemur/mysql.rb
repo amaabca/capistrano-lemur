@@ -38,13 +38,8 @@ Capistrano::Configuration.instance.load do
 
     desc "Just creates a mysql user"
     task :create_user, :roles => :mysql, :except => { :no_release => true } do
-
-      if defined?(mysql_server) && !mysql_server.nil?
-        db_server = mysql_server
-      else
-        db_server =  Capistrano::CLI.ui.ask("Mysql server (Blank for first server with :mysql role): ")
-        db_server = roles[:mysql].servers.first if db_server.nil?
-      end
+      db_server =  Capistrano::CLI.ui.ask("Mysql server (Blank for :mysql_server): ")
+      db_server = mysql_server if db_server.nil? && defined?(mysql_server) && !mysql_server.nil?
       db_user  = Capistrano::CLI.ui.ask("Database user: ")
       db_host = Capistrano::CLI.ui.ask("Database host (blank for '%'): ") || "%"
       db_password = Capistrano::CLI.password_prompt("Database user password: ")
