@@ -14,7 +14,7 @@ Gem::Specification.new do |gem|
   gem.name          = "capistrano-lemur"
   gem.require_paths = ["lib"]
   gem.version       = Capistrano::Lemur::VERSION
-  
-  gem.add_dependency "capistrano", "~> 2.11.2"
-  
+
+  gem.add_dependency "capistrano", "~> 2.12.0"
+
 end
